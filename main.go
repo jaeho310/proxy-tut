@@ -9,8 +9,14 @@ import (
 
 func main() {
 	dataGateway := gateway.DataGatewayImpl{}.New()
-	proxyService := service.ProxyServiceImpl{}.New(dataGateway)
+	proxyService := service.ProxyDataServiceImpl{}.New(dataGateway)
 
+	runClient(proxyService)
+
+	<-time.After(time.Second * 10)
+}
+
+func runClient(proxyService *service.ProxyDataServiceImpl) {
 	for i := 0; i < 5; i++ {
 		go func() {
 			data, err := proxyService.GetDataWithParam("hello")
@@ -19,7 +25,6 @@ func main() {
 			}
 			fmt.Println("클라이언트: 결과 데이터:", data)
 		}()
-		<-time.After(time.Millisecond * 350)
+		<-time.After(time.Millisecond * 400)
 	}
-	<-time.After(time.Second * 10)
 }

@@ -22,17 +22,17 @@ func (temporaryRepositoryImpl *TemporaryRepositoryImpl) setData(key string, valu
 	temporaryRepositoryImpl.cache.Set(key, value, cache.DefaultExpiration)
 }
 
-func (temporaryRepositoryImpl *TemporaryRepositoryImpl) GetResponseModel(key string) (bool, *model.ResponseCtxModel, error) {
+func (temporaryRepositoryImpl *TemporaryRepositoryImpl) GetResponseModel(key string) (bool, *model.ResponseCtxModel) {
 	temporaryRepositoryImpl.mu.Lock()
 	defer temporaryRepositoryImpl.mu.Unlock()
 	data, found := temporaryRepositoryImpl.cache.Get(key)
 	if found {
-		return true, data.(*model.ResponseCtxModel), nil
+		return false, data.(*model.ResponseCtxModel)
 	} else {
 		ctx, cancel := context.WithCancel(context.Background())
 		temporaryModel := &model.ResponseCtxModel{Value: "", Cancel: cancel, Ctx: ctx}
 		temporaryRepositoryImpl.setData(key, temporaryModel)
-		return false, temporaryModel, nil
+		return true, temporaryModel
 	}
 
 }
