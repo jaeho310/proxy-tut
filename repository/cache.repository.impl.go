@@ -24,7 +24,7 @@ func (cacheRepositoryImpl *CacheRepositoryImpl) GetData(key string) string {
 }
 
 func (cacheRepositoryImpl *CacheRepositoryImpl) SetData(key string, value string) {
-	fmt.Printf("서버: 본서버에서 response가 왔으므로 {%s: %s}의 데이터를 캐시합니다\n", key, value)
+	fmt.Printf("프록시서버: 본서버에서 response가 왔으므로 {%s: %s}의 데이터를 캐시합니다\n", key, value)
 	cacheRepositoryImpl.cache.Set(key, value, cache.DefaultExpiration)
 
 }
